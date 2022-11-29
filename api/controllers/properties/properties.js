@@ -1,6 +1,5 @@
 const Property = require('../../models/properties_schema');
 const mongoose = require('mongoose');
-const path = require('path');
 
 exports.create_property = (req, res, next) => {
     console.log(req.file, req.body);
@@ -21,11 +20,11 @@ exports.create_property = (req, res, next) => {
             message: 'Property created'
         });
     })
-    .catch((error)=>{
-        console.log(error);
+    .catch((err)=>{
+        console.log(err);
         return res.status(500).json({
-            error: error
-        })
+            error: err
+        });
     });
 }
 
@@ -100,7 +99,7 @@ exports.update_property = (req, res, next) => {
         .exec()
         .then(result => {
             return res.status(200).json({
-                message: 'Property updated updated',
+                message: 'Property updated',
             });
         })
         .catch(err => {
@@ -117,7 +116,7 @@ exports.remove_property = (req, res, next) => {
         .exec()
         .then((result) => {
             return res.status(200).json({
-                message: 'Property removed successfully.'
+                message: 'Property removed'
             });
         })
         .catch((err) => {
