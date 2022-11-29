@@ -9,12 +9,12 @@ exports.create_property = (req, res, next) => {
         stand_number: req.body.stand_number,
         property_number: req.body.property_number,
         address: req.body.address,
-        photo_url: req.file,
+        photo_url: req.file.path,
         address: req.body.address,
         created_at: Date.now()
     });
 
-    /*property.save()
+    property.save()
     .then((result)=>{
         console.log(result);
         return res.status(201).json({
@@ -24,9 +24,9 @@ exports.create_property = (req, res, next) => {
     .catch((error)=>{
         console.log(error);
         return res.status(500).json({
-            error: err
+            error: error
         })
-    });*/
+    });
 }
 
 //Retrieve all properties
