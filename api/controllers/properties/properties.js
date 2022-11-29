@@ -8,3 +8,16 @@ exports.get_all_properties = (req, res, next) => {
         message: 'Route working'
     });
 }
+
+/*
+exports.get_single_property = (req, res, next) => {
+    
+}
+
+exports.remove_property = (req, res, next) => {
+
+}
+
+exports.update_property = (req, res, next) => {
+
+}*/
