@@ -1,11 +1,17 @@
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-require('dotenv').config;
+const mongoose = require('mongoose');
+require('dotenv').config('.env');
 
 const app = express();
 
 const properties_route = require('./api/routes/properties/properties');
+
+mongoose.connect('mongodb+srv://Myrddin:' + process.env.DB_PASSWORD + '@cluster0.rkg1th9.mongodb.net/' + process.env.DB_NAME +'?retryWrites=true&w=majority',{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
