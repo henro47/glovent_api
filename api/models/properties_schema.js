@@ -17,9 +17,10 @@ const properties_schema = mongoose.Schema({
     {
         lat: { type: Number },
         lng: { type: Number }
-    }
-    ,
-    photo_url: {type: String},
+    },
+    stand_size: { type: Number },
+    building_size: { type: Number },
+    photo_url: { type: String },
     created_at: { type: Date },
     updated_at: { type: Date },
     deleted_at: { type: Date }
