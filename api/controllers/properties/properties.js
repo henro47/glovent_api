@@ -7,32 +7,34 @@ exports.create_property = (req, res, next) => {
         _id: new mongoose.Types.ObjectId(),
         stand_number: req.body.stand_number,
         property_number: req.body.property_number,
-        address: req.body.address,
+        address: JSON.parse(req.body.address),
+        GPS_lat_lng: JSON.parse(req.body.GPS_lat_lng),
         photo_url: req.file.path,
-        address: req.body.address,
+        stand_size: req.body.stand_size,
+        building_size: req.body.building_size,
         created_at: Date.now()
     });
-
+    console.log(property);
     property.save()
-    .then((result)=>{
-        console.log(result);
-        return res.status(201).json({
-            message: 'Property created'
+        .then((result) => {
+            console.log(result);
+            return res.status(201).json({
+                message: 'Property created'
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            return res.status(500).json({
+                error: err
+            });
         });
-    })
-    .catch((err)=>{
-        console.log(err);
-        return res.status(500).json({
-            error: err
-        });
-    });
 }
 
 //Retrieve all properties
 //CRUD OPERATION: READ
 exports.get_all_properties = (req, res, next) => {
     Property.find()
-        .select('_id stand_number property_number address GPS_lat_lng photo_url created_at updated_at deleted_at')
+        .select('_id stand_number property_number address GPS_lat_lng photo_url stand_size building_size created_at updated_at deleted_at')
         .exec()
         .then((docs) => {
             const response = {
@@ -45,6 +47,8 @@ exports.get_all_properties = (req, res, next) => {
                         address: doc.address,
                         GPS_lat_lng: doc.GPS_lat_lng,
                         photo_url: doc.photo_url,
+                        stand_size: doc.stand_size,
+                        building_size: doc.building_size,
                         created_at: doc.created_at,
                         updated_at: doc.updated_at,
                         deleted_at: doc.deleted_at
@@ -66,7 +70,7 @@ exports.get_all_properties = (req, res, next) => {
 //CRUD OPERATION: READ
 exports.get_single_property = (req, res, next) => {
     Property.find({ _id: req.params.id })
-        .select('_id stand_number property_number address GPS_lat_lng photo_url created_at updated_at deleted_at')
+        .select('_id stand_number property_number address GPS_lat_lng photo_url stand_size building_size created_at updated_at deleted_at')
         .exec()
         .then((doc) => {
             if (doc) {
@@ -89,13 +93,37 @@ exports.get_single_property = (req, res, next) => {
 
 exports.update_property = (req, res, next) => {
     const id = req.params.id;
-    const updateOps = {};
-
-    for (const ops of req.body) {
-        updateOps[ops.propName] = ops.value;
+    let update_obj = {};
+    if (req.body.property_number !== '') {
+        update_obj.property_number = req.body.property_number;
     }
 
-    User.update({ _id: id }, { $set: updateOps })
+    if (req.body.stand_number != '') {
+        update_obj.stand_number = req.body.stand_number;
+    }
+
+    if (req.body.address.street_no !== '') {
+        update_obj.address = JSON.parse(req.body.address);
+    }
+
+    if (req.body.GPS_lat_lng !== '') {
+        update_obj.GPS_lat_lng = JSON.parse(req.body.GPS_lat_lng);
+    }
+
+    if (req.body.stand_size != '') {
+        update_obj.stand_size = req.body.stand_size;
+    }
+
+    if (req.body.building_size != '') {
+        update_obj.building_size = req.body.building_size;
+    }
+
+    if (req.file !== undefined) {
+        update_obj.photo_url = req.file.path;
+    }
+    console.log(update_obj);
+
+    Property.updateOne({ _id: id }, { $set: update_obj })
         .exec()
         .then(result => {
             return res.status(200).json({
